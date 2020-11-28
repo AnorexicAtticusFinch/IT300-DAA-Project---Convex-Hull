@@ -8,10 +8,11 @@ If the executable file is being used without compiling, it will need to be given
 ---------------------------------------------------------------------------------
 
 Object Outline (Sklansky): REQUIRES OPENCV
-
-g++ main.cpp -o main `pkg-config --cflags --libs opencv`
+`
+g++ main.cpp -o main \`pkg-config --cflags --libs opencv\`
 
 ./main test.jpeg
+`
 
 Divide and Conquer: REQUIRES C++ 11 AND ABOVE
 
