@@ -7,7 +7,6 @@ pair<int, int> secondEle(stack<pair<int, int>> &st)
 {
     pair<int, int> pt = st.top();
     st.pop();
-    assert(!st.empty());
     pair<int, int> res = st.top();
     st.push(pt);
     return res;
@@ -15,8 +14,8 @@ pair<int, int> secondEle(stack<pair<int, int>> &st)
 
 int checkDirection(pair<int, int> p1, pair<int, int> p2, pair<int, int> p3)
 {
-    int val = (p2.second - p1.second) * (p3.first - p2.first) -
-              (p2.first - p1.first) * (p3.second - p2.second);
+    int val = ((p2.second - p1.second) * (p3.first - p2.first)) -
+              ((p2.first - p1.first) * (p3.second - p2.second));
 
     if (val == 0)
         return 0;
@@ -38,13 +37,11 @@ double getSlope(pair<int, int> p1, pair<int, int> p2)
 
 bool cmp(pair<int, int> x, pair<int, int> y)
 {
-    double slope1 = getSlope(pt0, x);
-    double slope2 = getSlope(pt0, y);
-    if (slope1 != slope2)
-    {
-        return slope1 < slope2;
-    }
-    return distance(pt0, y) >= distance(pt0, x);
+    int val = checkDirection(pt0, x, y);
+    if (val == 0)
+        return distance(pt0, x) < distance(pt0, y);
+
+    return (val == 2) ? true : false;
 }
 
 pair<int, int> getBottommostPoint(vector<pair<int, int>> &arr, int n)
@@ -98,8 +95,10 @@ vector<pair<int, int>> grahamScan(vector<pair<int, int>> arr, int n)
 
     for (int i = 3; i < sz; i++)
     {
-        while (!st.empty() && checkDirection(secondEle(st), st.top(), pts[i]) != 2)
+        while (checkDirection(secondEle(st), st.top(), pts[i]) != 2)
+        {
             st.pop();
+        }
         st.push(pts[i]);
     }
     while (!st.empty())
@@ -114,16 +113,17 @@ vector<pair<int, int>> grahamScan(vector<pair<int, int>> arr, int n)
 int main(int argc, char *argv[])
 {
     if (argc == 1)
-	{
-		cout << "Please enter filename" << endl;
-		return 0;
-	}
-    
+    {
+        cout << "Enter filename as command line argument" << endl;
+        return 0;
+    }
+
     string filename = argv[argc - 1];
     ifstream myfile(filename);
 
     if (myfile.is_open())
     {
+
         int n;
         myfile >> n;
 
@@ -147,4 +147,5 @@ int main(int argc, char *argv[])
     {
         cout << "Unable to open file" << endl;
     }
+    return 0;
 }
